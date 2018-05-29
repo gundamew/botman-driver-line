@@ -1,17 +1,17 @@
 {
-    "name": "botman/driver-web",
+    "name": "gundamew/botman-driver-line",
     "license": "MIT",
-    "description": "Web driver for BotMan",
+    "description": "LINE driver for BotMan",
     "keywords": [
         "Bot",
         "BotMan",
-        "Web"
+        "LINE"
     ],
-    "homepage": "http://github.com/botman/driver-web",
+    "homepage": "http://github.com/gundamew/botman-driver-line",
     "authors": [
         {
-            "name": "Marcel Pociot",
-            "email": "m.pociot@gmail.com"
+            "name": "Bing-Sheng Chen",
+            "email": "gundamew@gmail.com"
         }
     ],
     "require": {
@@ -19,32 +19,16 @@
         "botman/botman": "~2.0"
     },
     "require-dev": {
-        "botman/studio-addons": "~1.0",
-        "illuminate/contracts": "~5.5.0",
-        "phpunit/phpunit": "~5.0",
-        "mockery/mockery": "dev-master",
-        "botman/driver-facebook": "dev-master",
-        "ext-curl": "*"
+        "phpunit/phpunit": "~5.0"
     },
     "autoload": {
         "psr-4": {
-            "BotMan\\Drivers\\Web\\": "src/"
+            "BotMan\\Drivers\\Line\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit",
-        "cs": "php-cs-fixer fix"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "BotMan\\Drivers\\Web\\Providers\\WebServiceProvider"
-            ]
         }
     }
 }

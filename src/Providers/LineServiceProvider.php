@@ -1,13 +1,13 @@
 <?php
 
-namespace BotMan\Drivers\Web\Providers;
+namespace BotMan\Drivers\Line\Providers;
 
-use BotMan\Drivers\Web\WebDriver;
+use BotMan\Drivers\Line\LineDriver;
 use Illuminate\Support\ServiceProvider;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\Studio\Providers\StudioServiceProvider;
 
-class WebServiceProvider extends ServiceProvider
+class LineServiceProvider extends ServiceProvider
 {
     /**
      * Perform post-registration booting of services.
@@ -20,14 +20,11 @@ class WebServiceProvider extends ServiceProvider
             $this->loadDrivers();
 
             $this->publishes([
-                __DIR__.'/../../stubs/web.php' => config_path('botman/web.php'),
+                __DIR__ . '/../../stubs/line.php' => config_path('botman/line.php'),
             ]);
 
-            $this->mergeConfigFrom(__DIR__.'/../../stubs/web.php', 'botman.web');
+            $this->mergeConfigFrom(__DIR__ . '/../../stubs/line.php', 'botman.line');
         }
-
-        $this->loadRoutesFrom(__DIR__.'/../Laravel/routes.php');
-        $this->loadViewsFrom(__DIR__.'/../Laravel/views', 'botman-web');
     }
 
     /**
@@ -35,7 +32,7 @@ class WebServiceProvider extends ServiceProvider
      */
     protected function loadDrivers()
     {
-        DriverManager::loadDriver(WebDriver::class);
+        DriverManager::loadDriver(LineDriver::class);
     }
 
     /**
