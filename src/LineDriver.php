@@ -6,28 +6,51 @@ use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Users\User;
 
 class LineDriver extends HttpDriver
 {
     const DRIVER_NAME = 'Line';
 
-    const MESSAGING_API_URL = 'https://api.line.me/v2/bot/message/reply';
+    const API_URL_BASE = 'https://api.line.me/v2/bot';
 
     protected $messages = [];
+
+    protected $eventTypes = [
+        'message',
+        'follow',
+        'unfollow',
+    ];
+
+    protected $messageTypes = [
+        'text',
+        'image',
+        'video',
+        'audio',
+        'file',
+        'location',
+        'sticker',
+    ];
 
     /**
      * @param Request $request
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-        $this->event = Collection::make((array) $this->payload->get('events')[0]);
+        $this->payload = $request->request->all();
+        $this->event = Collection::make(json_decode($this->content, true)['events'][0]);
         $this->signature = $request->headers->get('X_LINE_SIGNATURE', '');
-        $this->content = $request->getContent();
-        $this->config = Collection::make($this->config->get('line', []));
+    }
+
+    public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
+    {
+        return $this->http->post($this->getApiUrl($endpoint), [], $parameters, [
+            'Authorization: Bearer ' . $this->config->get('channel_access_token'),
+        ], true);
     }
 
     /**
@@ -36,6 +59,12 @@ class LineDriver extends HttpDriver
      */
     public function getUser(IncomingMessage $matchingMessage)
     {
+        $userId = $matchingMessage->getSender();
+
+        $response = $this->sendRequest('/profile/' . urlencode($userId), [], $matchingMessage);
+        $profile = Collection::make(json_decode($response->getContent(), true));
+
+        return new User($profile->get('userId'), null, null, $profile->get('displayName'), $profile->toJson());
     }
 
     /**
@@ -45,7 +74,10 @@ class LineDriver extends HttpDriver
      */
     public function matchesRequest()
     {
-        return (empty($this->config->get('channel_secret')) || $this->validateSignature());
+        $isValidSignature = !empty($this->config->get('channel_secret')) || $this->validateSignature();
+        $isValidMessage = ($this->event->get('type') === 'message') && (in_array($this->event->get('message')['type'], $this->messageTypes, true));
+
+        return ($isValidSignature && $isValidMessage);
     }
 
     /**
@@ -54,6 +86,7 @@ class LineDriver extends HttpDriver
      */
     public function getConversationAnswer(IncomingMessage $message)
     {
+        return Answer::create($message->getText())->setMessage($message);
     }
 
     /**
@@ -66,8 +99,8 @@ class LineDriver extends HttpDriver
         if (empty($this->messages)) {
             $this->messages = [new IncomingMessage(
                 $this->event->get('message')['text'],
-                $this->event->get('replyToken'),
                 $this->event->get('source')['userId'],
+                $this->event->get('replyToken'),
                 $this->payload
             )];
         }
@@ -81,7 +114,7 @@ class LineDriver extends HttpDriver
      * @param array $additionalParameters
      * @return Response
      */
-    public function buildServicePayload($message)
+    public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
         $text = ($message instanceof OutgoingMessage) ? $message->getText() : $message;
 
@@ -102,7 +135,7 @@ class LineDriver extends HttpDriver
      */
     public function sendPayload($payload)
     {
-        return $this->http->post(static::MESSAGING_API_URL, [], $payload, [
+        return $this->http->post($this->getApiUrl('/message/reply'), [], $payload, [
             'Authorization: Bearer ' . $this->config->get('channel_access_token'),
             'Content-Type: application/json',
         ], true);
@@ -124,5 +157,10 @@ class LineDriver extends HttpDriver
             ),
             $this->signature
         );
+    }
+
+    protected function getApiUrl($endpoint)
+    {
+        return static::API_URL_BASE . $endpoint;
     }
 }

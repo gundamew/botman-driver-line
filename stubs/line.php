@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'channel_secret' => env('CHANNEL_SECRET'),
-    'channel_access_token' => env('CHANNEL_ACCESS_TOKEN'),
+    'channel_secret' => env('LINE_CHANNEL_SECRET'),
+    'channel_access_token' => env('LINE_CHANNEL_ACCESS_TOKEN'),
 ];
