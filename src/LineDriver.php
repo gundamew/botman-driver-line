@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
@@ -106,6 +107,12 @@ class LineDriver extends HttpDriver
                     'type' => 'image',
                     'originalContentUrl' => $attachment->getUrl(),
                     'previewImageUrl' => $attachment->getUrl(),
+                ];
+            } elseif ($attachment instanceof Video) {
+                $parameters['messages'][] = [
+                    'type' => 'video',
+                    'originalContentUrl' => $attachment->getUrl(),
+                    'previewImageUrl' => $attachment->getExtras('thumbnail'),
                 ];
             }
         }
