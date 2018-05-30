@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
@@ -85,7 +86,7 @@ class LineDriver extends HttpDriver
     }
 
     /**
-     * @param string|Question|OutgoingMessage $message
+     * @param Question|OutgoingMessage $message
      * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
      * @return array
@@ -94,18 +95,24 @@ class LineDriver extends HttpDriver
     {
         $parameters = array_merge_recursive([
             'replyToken' => $this->event->get('replyToken'),
-            'messages' => [
-                [
-                    'type' => 'text',
-                    'text' => '',
-                ],
-            ],
+            'messages' => [],
         ], $additionalParameters);
 
-        if ($message instanceof Question || $message instanceof OutgoingMessage) {
-            $parameters['messages'][0]['text'] = $message->getText();
+        $attachment = $message->getAttachment();
+
+        if ($attachment !== null) {
+            if ($attachment instanceof Image) {
+                $parameters['messages'][] = [
+                    'type' => 'image',
+                    'originalContentUrl' => $attachment->getUrl(),
+                    'previewImageUrl' => $attachment->getUrl(),
+                ];
+            }
         } else {
-            $parameters['messages'][0]['text'] = $message;
+            $parameters['messages'][] = [
+                'type' => 'text',
+                'text' => $message->getText(),
+            ];
         }
 
         return $parameters;
