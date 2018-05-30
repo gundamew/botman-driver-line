@@ -108,12 +108,12 @@ class LineDriver extends HttpDriver
                     'previewImageUrl' => $attachment->getUrl(),
                 ];
             }
-        } else {
-            $parameters['messages'][] = [
-                'type' => 'text',
-                'text' => $message->getText(),
-            ];
         }
+
+        $parameters['messages'][] = [
+            'type' => 'text',
+            'text' => $message->getText(),
+        ];
 
         return $parameters;
     }
