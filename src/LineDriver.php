@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
@@ -120,6 +121,14 @@ class LineDriver extends HttpDriver
                     'type' => 'audio',
                     'originalContentUrl' => $attachment->getUrl(),
                     'duration' => $attachment->getExtras('duration'),
+                ];
+            } elseif ($attachment instanceof Location) {
+                $parameters['messages'][] = [
+                    'type' => 'location',
+                    'title' => $attachment->getExtras('title'),
+                    'address' => $attachment->getExtras('address'),
+                    'latitude' => $attachment->getLatitude(),
+                    'longitude' => $attachment->getLongitude(),
                 ];
             }
         }
