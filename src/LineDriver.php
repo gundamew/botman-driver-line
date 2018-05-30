@@ -20,22 +20,6 @@ class LineDriver extends HttpDriver
 
     protected $messages = [];
 
-    protected $eventTypes = [
-        'message',
-        'follow',
-        'unfollow',
-    ];
-
-    protected $messageTypes = [
-        'text',
-        'image',
-        'video',
-        'audio',
-        'file',
-        'location',
-        'sticker',
-    ];
-
     /**
      * @param Request $request
      */
@@ -48,9 +32,6 @@ class LineDriver extends HttpDriver
 
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
-        return $this->http->post($this->getApiUrl($endpoint), [], $parameters, [
-            'Authorization: Bearer ' . $this->config->get('channel_access_token'),
-        ], true);
     }
 
     /**
@@ -59,12 +40,6 @@ class LineDriver extends HttpDriver
      */
     public function getUser(IncomingMessage $matchingMessage)
     {
-        $userId = $matchingMessage->getSender();
-
-        $response = $this->sendRequest('/profile/' . urlencode($userId), [], $matchingMessage);
-        $profile = Collection::make(json_decode($response->getContent(), true));
-
-        return new User($profile->get('userId'), null, null, $profile->get('displayName'), $profile->toJson());
     }
 
     /**
@@ -74,10 +49,7 @@ class LineDriver extends HttpDriver
      */
     public function matchesRequest()
     {
-        $isValidSignature = !empty($this->config->get('channel_secret')) || $this->validateSignature();
-        $isValidMessage = ($this->event->get('type') === 'message') && (in_array($this->event->get('message')['type'], $this->messageTypes, true));
-
-        return ($isValidSignature && $isValidMessage);
+        return $this->validateSignature();
     }
 
     /**
@@ -99,9 +71,9 @@ class LineDriver extends HttpDriver
         if (empty($this->messages)) {
             $this->messages = [new IncomingMessage(
                 $this->event->get('message')['text'],
-                $this->event->get('source')['userId'],
-                $this->event->get('replyToken'),
-                $this->payload
+                '',
+                '',
+                null
             )];
         }
 
@@ -146,7 +118,7 @@ class LineDriver extends HttpDriver
      */
     public function isConfigured()
     {
-        return (!empty($this->config->get('channel_access_token')));
+        //return (!empty($this->config->get('channel_access_token')));
     }
 
     protected function validateSignature()
