@@ -36,9 +36,24 @@ class LineDriver extends HttpDriver
         $this->config = Collection::make($this->config->get('line'));
     }
 
+    /**
+     * Low-level method to perform driver specific API requests.
+     *
+     * @param string $endpoint
+     * @param array $parameters
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     * @return void
+     */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
-        return $this->http->post($this->getApiUrl($endpoint), [], $parameters);
+        $parameters = array_merge_recursive([
+            'replyToken' => $this->event->get('replyToken'),
+        ], $parameters);
+
+        return $this->http->post($this->getApiUrl($endpoint), [], $parameters, [
+            'Authorization: Bearer ' . $this->config->get('channel_access_token'),
+            'Content-Type: application/json',
+        ], true);
     }
 
     /**
@@ -96,10 +111,10 @@ class LineDriver extends HttpDriver
      */
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
-        $parameters = array_merge_recursive([
+        $parameters = [
             'replyToken' => $this->event->get('replyToken'),
             'messages' => [],
-        ], $additionalParameters);
+        ];
 
         $attachment = $message->getAttachment();
 
