@@ -10,6 +10,7 @@ use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Users\User;
 
 class LineDriver extends HttpDriver
@@ -28,10 +29,12 @@ class LineDriver extends HttpDriver
         $this->payload = $request->request->all();
         $this->event = Collection::make(json_decode($this->content, true)['events'][0]);
         $this->signature = $request->headers->get('X_LINE_SIGNATURE', '');
+        $this->config = Collection::make($this->config->get('line'));
     }
 
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
+        return $this->http->post($this->getApiUrl($endpoint), [], $parameters);
     }
 
     /**
@@ -40,6 +43,7 @@ class LineDriver extends HttpDriver
      */
     public function getUser(IncomingMessage $matchingMessage)
     {
+        return new User();
     }
 
     /**
@@ -71,9 +75,9 @@ class LineDriver extends HttpDriver
         if (empty($this->messages)) {
             $this->messages = [new IncomingMessage(
                 $this->event->get('message')['text'],
-                '',
-                '',
-                null
+                $this->event->get('source')['userId'],
+                $this->event->get('source')['userId'],
+                $this->payload
             )];
         }
 
@@ -84,25 +88,31 @@ class LineDriver extends HttpDriver
      * @param string|Question|OutgoingMessage $message
      * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters
-     * @return Response
+     * @return array
      */
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
-        $text = ($message instanceof OutgoingMessage) ? $message->getText() : $message;
-
-        return [
+        $parameters = array_merge_recursive([
             'replyToken' => $this->event->get('replyToken'),
             'messages' => [
                 [
                     'type' => 'text',
-                    'text' => $text,
+                    'text' => '',
                 ],
             ],
-        ];
+        ], $additionalParameters);
+
+        if ($message instanceof Question || $message instanceof OutgoingMessage) {
+            $parameters['messages'][0]['text'] = $message->getText();
+        } else {
+            $parameters['messages'][0]['text'] = $message;
+        }
+
+        return $parameters;
     }
 
     /**
-     * @param mixed $payload
+     * @param array $payload
      * @return Response
      */
     public function sendPayload($payload)
@@ -118,9 +128,12 @@ class LineDriver extends HttpDriver
      */
     public function isConfigured()
     {
-        //return (!empty($this->config->get('channel_access_token')));
+        return (!empty($this->config->get('channel_access_token')));
     }
 
+    /**
+     * @return bool
+     */
     protected function validateSignature()
     {
         return hash_equals(
@@ -131,6 +144,12 @@ class LineDriver extends HttpDriver
         );
     }
 
+    /**
+     * Generate the LINE messaging API URL for the given endpoint.
+     *
+     * @param string $endpoint
+     * @return string
+     */
     protected function getApiUrl($endpoint)
     {
         return static::API_URL_BASE . $endpoint;
