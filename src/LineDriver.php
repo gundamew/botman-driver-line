@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -113,6 +114,12 @@ class LineDriver extends HttpDriver
                     'type' => 'video',
                     'originalContentUrl' => $attachment->getUrl(),
                     'previewImageUrl' => $attachment->getExtras('thumbnail'),
+                ];
+            } elseif ($attachment instanceof Audio) {
+                $parameters['messages'][] = [
+                    'type' => 'audio',
+                    'originalContentUrl' => $attachment->getUrl(),
+                    'duration' => $attachment->getExtras('duration'),
                 ];
             }
         }
