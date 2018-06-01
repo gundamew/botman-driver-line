@@ -46,9 +46,10 @@ class LineDriver extends HttpDriver
      */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
-        $parameters = array_merge_recursive([
+        $parameters = [
             'replyToken' => $this->event->get('replyToken'),
-        ], $parameters);
+            'messages' => [$parameters],
+        ];
 
         return $this->http->post($this->getApiUrl($endpoint), [], $parameters, [
             'Authorization: Bearer ' . $this->config->get('channel_access_token'),
@@ -66,41 +67,12 @@ class LineDriver extends HttpDriver
     }
 
     /**
-     * Determine if the request is for this driver.
-     *
-     * @return bool
-     */
-    public function matchesRequest()
-    {
-        return $this->validateSignature();
-    }
-
-    /**
      * @param  IncomingMessage $message
      * @return \BotMan\BotMan\Messages\Incoming\Answer
      */
     public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create($message->getText())->setMessage($message);
-    }
-
-    /**
-     * Retrieve the chat message.
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        if (empty($this->messages)) {
-            $this->messages = [new IncomingMessage(
-                $this->event->get('message')['text'],
-                $this->event->get('source')['userId'],
-                $this->event->get('source')['userId'],
-                $this->payload
-            )];
-        }
-
-        return $this->messages;
     }
 
     /**
@@ -116,7 +88,11 @@ class LineDriver extends HttpDriver
             'messages' => [],
         ];
 
-        $attachment = $message->getAttachment();
+        $attachment = null;
+
+        if ($message instanceof OutgoingMessage) {
+            $attachment = $message->getAttachment();
+        }
 
         if ($attachment !== null) {
             if ($attachment instanceof Image) {
