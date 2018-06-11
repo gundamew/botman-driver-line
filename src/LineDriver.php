@@ -67,12 +67,32 @@ class LineDriver extends HttpDriver
     }
 
     /**
+     * Determine if the request is for this driver.
+     *
+     * @return bool
+     */
+    public function matchesRequest()
+    {
+        return $this->validateSignature();
+    }
+
+    /**
      * @param  IncomingMessage $message
      * @return \BotMan\BotMan\Messages\Incoming\Answer
      */
     public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create($message->getText())->setMessage($message);
+    }
+
+    /**
+     * Retrieve the chat message.
+     *
+     * @return array
+     */
+    public function getMessages()
+    {
+        return [];
     }
 
     /**
@@ -174,5 +194,16 @@ class LineDriver extends HttpDriver
     protected function getApiUrl($endpoint)
     {
         return static::API_URL_BASE . $endpoint;
+    }
+
+    /**
+     * @param string $messageId
+     * @return string
+     */
+    protected function getMessageContent($messageId)
+    {
+        return $this->http->get($this->getApiUrl('/message/' . urlencode($messageId) . '/content'), [], [
+            'Authorization: Bearer ' . $this->config->get('channel_access_token'),
+        ])->getContent();
     }
 }
