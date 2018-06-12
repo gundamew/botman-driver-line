@@ -14,13 +14,13 @@ class ButtonsTemplate extends AbstractTemplate
     protected $titleImageUrl = '';
 
     /** @var string */
-    protected $titleImageShape = '';
+    protected $titleImageShape = 'rectangle';
 
     /** @var string */
-    protected $titleImageSize = '';
+    protected $titleImageSize = 'cover';
 
     /** @var string */
-    protected $titleImageBackgroundColor = '';
+    protected $titleImageBackgroundColor = '#ffffff';
 
     /**
      * Set the title of buttons template message.
@@ -54,7 +54,7 @@ class ButtonsTemplate extends AbstractTemplate
      * @param string $url
      * @return $this
      */
-    public function titleImageUrl($url = '')
+    public function titleImageUrl($url)
     {
         $this->titleImageUrl = $url;
 
@@ -68,7 +68,7 @@ class ButtonsTemplate extends AbstractTemplate
      * @param string $shape
      * @return $this
      */
-    public function titleImageShape($shape = 'rectangle')
+    public function titleImageShape($shape)
     {
         $this->titleImageShape = $shape;
 
@@ -82,7 +82,7 @@ class ButtonsTemplate extends AbstractTemplate
      * @param string $size
      * @return $this
      */
-    public function titleImageSize($size = 'cover')
+    public function titleImageSize($size)
     {
         $this->titleImageSize = $size;
 
@@ -95,7 +95,7 @@ class ButtonsTemplate extends AbstractTemplate
      * @param string $color
      * @return $this
      */
-    public function titleImageBackgroundColor($color = '#ffffff')
+    public function titleImageBackgroundColor($color)
     {
         $this->titleImageBackgroundColor = $color;
 
