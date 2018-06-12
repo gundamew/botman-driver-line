@@ -2,13 +2,13 @@
 
 namespace BotMan\Drivers\Line\Extensions;
 
-class ActionObject implements \JsonSerializable
+abstract class AbstractButton implements \JsonSerializable
 {
     /** @var string */
-    protected $label;
+    protected $label = '';
 
     /** @var string */
-    protected $value;
+    protected $value = '';
 
     /**
      * @param string $label
@@ -40,6 +40,11 @@ class ActionObject implements \JsonSerializable
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    abstract public function toArray();
 
     /**
      * @return array

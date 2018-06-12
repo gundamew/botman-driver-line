@@ -2,7 +2,7 @@
 
 namespace BotMan\Drivers\Line\Extensions;
 
-class UriButton extends ActionObject
+class UriButton extends AbstractButton
 {
     /**
      * @return array

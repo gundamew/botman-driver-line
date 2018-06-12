@@ -2,19 +2,19 @@
 
 namespace BotMan\Drivers\Line\Extensions;
 
-class DatetimePickerButton extends ActionObject
+class DatetimePickerButton extends AbstractButton
 {
     /** @var string */
-    protected $mode;
+    protected $mode = '';
 
     /** @var string */
-    protected $initial;
+    protected $initial = '';
 
     /** @var string */
-    protected $start;
+    protected $start = '';
 
     /** @var string */
-    protected $end;
+    protected $end = '';
 
     /**
      * Set the datetime picker action mode.

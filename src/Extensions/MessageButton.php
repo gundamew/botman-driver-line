@@ -2,7 +2,7 @@
 
 namespace BotMan\Drivers\Line\Extensions;
 
-class MessageButton extends ActionObject
+class MessageButton extends AbstractButton
 {
     /**
      * @return array
