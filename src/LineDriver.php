@@ -108,46 +108,46 @@ class LineDriver extends HttpDriver
             'messages' => [],
         ];
 
-        $attachment = null;
-
         if ($message instanceof OutgoingMessage) {
+            $parameters['messages'][] = [
+                'type' => 'text',
+                'text' => $message->getText(),
+            ];
+
             $attachment = $message->getAttachment();
-        }
 
-        if ($attachment !== null) {
-            if ($attachment instanceof Image) {
-                $parameters['messages'][] = [
-                    'type' => 'image',
-                    'originalContentUrl' => $attachment->getUrl(),
-                    'previewImageUrl' => $attachment->getUrl(),
-                ];
-            } elseif ($attachment instanceof Video) {
-                $parameters['messages'][] = [
-                    'type' => 'video',
-                    'originalContentUrl' => $attachment->getUrl(),
-                    'previewImageUrl' => $attachment->getExtras('thumbnail'),
-                ];
-            } elseif ($attachment instanceof Audio) {
-                $parameters['messages'][] = [
-                    'type' => 'audio',
-                    'originalContentUrl' => $attachment->getUrl(),
-                    'duration' => $attachment->getExtras('duration'),
-                ];
-            } elseif ($attachment instanceof Location) {
-                $parameters['messages'][] = [
-                    'type' => 'location',
-                    'title' => $attachment->getExtras('title'),
-                    'address' => $attachment->getExtras('address'),
-                    'latitude' => $attachment->getLatitude(),
-                    'longitude' => $attachment->getLongitude(),
-                ];
+            if ($attachment !== null) {
+                if ($attachment instanceof Image) {
+                    $parameters['messages'][] = [
+                        'type' => 'image',
+                        'originalContentUrl' => $attachment->getUrl(),
+                        'previewImageUrl' => $attachment->getUrl(),
+                    ];
+                } elseif ($attachment instanceof Video) {
+                    $parameters['messages'][] = [
+                        'type' => 'video',
+                        'originalContentUrl' => $attachment->getUrl(),
+                        'previewImageUrl' => $attachment->getExtras('thumbnail'),
+                    ];
+                } elseif ($attachment instanceof Audio) {
+                    $parameters['messages'][] = [
+                        'type' => 'audio',
+                        'originalContentUrl' => $attachment->getUrl(),
+                        'duration' => $attachment->getExtras('duration'),
+                    ];
+                } elseif ($attachment instanceof Location) {
+                    $parameters['messages'][] = [
+                        'type' => 'location',
+                        'title' => $attachment->getExtras('title'),
+                        'address' => $attachment->getExtras('address'),
+                        'latitude' => $attachment->getLatitude(),
+                        'longitude' => $attachment->getLongitude(),
+                    ];
+                }
             }
+        } else {
+            $parameters['messages'][] = $message;
         }
-
-        $parameters['messages'][] = [
-            'type' => 'text',
-            'text' => $message->getText(),
-        ];
 
         return $parameters;
     }
