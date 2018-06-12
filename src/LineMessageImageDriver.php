@@ -45,6 +45,12 @@ class LineMessageImageDriver extends LineDriver
      */
     public function getImageContent()
     {
-        return $this->getMessageContent($this->event->get('message')['id']);
+        return $this->http->get(
+            $this->getApiUrl('/message/' . urlencode($this->event->get('message')['id']) . '/content'),
+            [],
+            [
+                'Authorization: Bearer ' . $this->config->get('channel_access_token'),
+            ]
+        )->getContent();
     }
 }

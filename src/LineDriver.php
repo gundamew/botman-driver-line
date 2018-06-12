@@ -195,15 +195,4 @@ class LineDriver extends HttpDriver
     {
         return static::API_URL_BASE . $endpoint;
     }
-
-    /**
-     * @param string $messageId
-     * @return string
-     */
-    protected function getMessageContent($messageId)
-    {
-        return $this->http->get($this->getApiUrl('/message/' . urlencode($messageId) . '/content'), [], [
-            'Authorization: Bearer ' . $this->config->get('channel_access_token'),
-        ])->getContent();
-    }
 }
