@@ -29,7 +29,7 @@ class LineMessageImageDriver extends LineDriver
     public function getMessages()
     {
         if (empty($this->messages)) {
-            $this->message = [new IncomingMessage(
+            $this->messages = [new IncomingMessage(
                 Image::PATTERN,
                 $this->event->get('source')['userId'],
                 $this->event->get('source')['userId'],
@@ -51,7 +51,7 @@ class LineMessageImageDriver extends LineDriver
             '/message/{messageId}/content'
         );
 
-        return $this->http->get($endpoint, [], [
+        return $this->http->get($this->getApiUrl($endpoint), [], [
             'Authorization: Bearer ' . $this->config->get('channel_access_token'),
         ])->getContent();
     }
