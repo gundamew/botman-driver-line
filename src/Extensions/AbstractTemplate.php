@@ -29,7 +29,7 @@ abstract class AbstractTemplate implements \JsonSerializable
     }
 
     /**
-     * @param MessageButton|PostbackButton $button
+     * @param AbstractButton $button
      * @return $this
      */
     public function addButton($button)
