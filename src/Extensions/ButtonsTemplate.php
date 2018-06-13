@@ -7,8 +7,8 @@ class ButtonsTemplate extends AbstractTemplate
     /** @var string */
     protected $title = '';
 
-    /** @var int */
-    protected $default = 0;
+    /** @var array */
+    protected $defaultAction = [];
 
     /** @var string */
     protected $titleImageUrl = '';
@@ -38,12 +38,12 @@ class ButtonsTemplate extends AbstractTemplate
     /**
      * Set action when image is tapped.
      *
-     * @param int $default
+     * @param AbstractButton $default
      * @return $this
      */
-    public function default($default)
+    public function defaultAction(AbstractButton $defaultAction)
     {
-        $this->default = $default;
+        $this->defaultAction = $defaultAction->toArray();
 
         return $this;
     }
@@ -121,8 +121,8 @@ class ButtonsTemplate extends AbstractTemplate
             $message['template']['title'] = $this->title;
         }
 
-        if ($this->default >= 0 && $this->default <= count($this->actions)) {
-            $message['template']['defaultAction'] = $this->actions[$this->default];
+        if (!empty($this->defaultAction)) {
+            $message['template']['defaultAction'] = $this->defaultAction;
         }
 
         if (!empty($this->titleImageUrl)) {
