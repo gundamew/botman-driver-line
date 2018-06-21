@@ -11,16 +11,16 @@ class ButtonsTemplate extends AbstractTemplate
     protected $defaultAction = [];
 
     /** @var string */
-    protected $titleImageUrl = '';
+    protected $imageUrl = '';
 
     /** @var string */
-    protected $titleImageShape = 'rectangle';
+    protected $imageAspectRatio = 'rectangle';
 
     /** @var string */
-    protected $titleImageSize = 'cover';
+    protected $imageSize = 'cover';
 
     /** @var string */
-    protected $titleImageBackgroundColor = '#ffffff';
+    protected $imageBackgroundColor = '#ffffff';
 
     /**
      * Set the title of buttons template message.
@@ -54,9 +54,9 @@ class ButtonsTemplate extends AbstractTemplate
      * @param string $url
      * @return $this
      */
-    public function titleImageUrl($url)
+    public function imageUrl($url)
     {
-        $this->titleImageUrl = $url;
+        $this->imageUrl = $url;
 
         return $this;
     }
@@ -65,12 +65,12 @@ class ButtonsTemplate extends AbstractTemplate
      * Select title image aspect ratio.
      * Available value: rectangle, square
      *
-     * @param string $shape
+     * @param string $aspectRatio
      * @return $this
      */
-    public function titleImageShape($shape)
+    public function imageAspectRatio($aspectRatio)
     {
-        $this->titleImageShape = $shape;
+        $this->imageAspectRatio = $aspectRatio;
 
         return $this;
     }
@@ -82,9 +82,9 @@ class ButtonsTemplate extends AbstractTemplate
      * @param string $size
      * @return $this
      */
-    public function titleImageSize($size)
+    public function imageSize($size)
     {
-        $this->titleImageSize = $size;
+        $this->imageSize = $size;
 
         return $this;
     }
@@ -95,9 +95,9 @@ class ButtonsTemplate extends AbstractTemplate
      * @param string $color
      * @return $this
      */
-    public function titleImageBackgroundColor($color)
+    public function imageBackgroundColor($color)
     {
-        $this->titleImageBackgroundColor = $color;
+        $this->imageBackgroundColor = $color;
 
         return $this;
     }
@@ -125,11 +125,11 @@ class ButtonsTemplate extends AbstractTemplate
             $message['template']['defaultAction'] = $this->defaultAction;
         }
 
-        if (!empty($this->titleImageUrl)) {
-            $message['template']['thumbnailImageUrl'] = $this->titleImageUrl;
-            $message['template']['imageAspectRatio'] = $this->titleImageShape;
-            $message['template']['imageSize'] = $this->titleImageSize;
-            $message['template']['imageBackgroundColor'] = $this->titleImageBackgroundColor;
+        if (!empty($this->imageUrl)) {
+            $message['template']['thumbnailImageUrl'] = $this->imageUrl;
+            $message['template']['imageAspectRatio'] = $this->imageAspectRatio;
+            $message['template']['imageSize'] = $this->imageSize;
+            $message['template']['imageBackgroundColor'] = $this->imageBackgroundColor;
         }
 
         return $message;
