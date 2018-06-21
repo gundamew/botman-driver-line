@@ -32,7 +32,7 @@ abstract class AbstractTemplate implements \JsonSerializable
      * @param AbstractButton $button
      * @return $this
      */
-    public function addButton($button)
+    public function addButton(AbstractButton $button)
     {
         $this->actions[] = $button->toArray();
 
