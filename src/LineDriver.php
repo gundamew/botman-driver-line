@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use BotMan\BotMan\Drivers\HttpDriver;
+use BotMan\BotMan\Drivers\Events\GenericEvent;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Location;
@@ -16,6 +17,8 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Users\User;
+
+use BotMan\Drivers\Line\Events\Postbacks;
 
 class LineDriver extends HttpDriver
 {
@@ -84,6 +87,23 @@ class LineDriver extends HttpDriver
     public function getConversationAnswer(IncomingMessage $message)
     {
         return Answer::create($message->getText())->setMessage($message);
+    }
+
+    /**
+     * @return bool|DriverEventInterface
+     */
+    public function hasMatchingEvent()
+    {
+        if ($this->event->has('postback')) {
+            return new Postbacks($this->event->get('postback'));
+        } else {
+            $event = new GenericEvent($this->event->get('message'));
+            $event->setName('message');
+
+            return $event;
+        }
+
+        return false;
     }
 
     /**
