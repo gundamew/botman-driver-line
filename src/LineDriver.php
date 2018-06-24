@@ -73,7 +73,8 @@ class LineDriver extends HttpDriver
      */
     public function matchesRequest()
     {
-        return $this->validateSignature();
+        return ($this->validateSignature()
+            && $this->event->whereInStrict('type', ['message', 'postback'])->isNotEmpty());
     }
 
     /**
