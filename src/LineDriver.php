@@ -18,7 +18,11 @@ use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Users\User;
 
-use BotMan\Drivers\Line\Events\Postbacks;
+use BotMan\Drivers\Line\Events\Follow;
+use BotMan\Drivers\Line\Events\Join;
+use BotMan\Drivers\Line\Events\Leave;
+use BotMan\Drivers\Line\Events\Postback;
+use BotMan\Drivers\Line\Events\Unfollow;
 
 class LineDriver extends HttpDriver
 {
@@ -94,13 +98,30 @@ class LineDriver extends HttpDriver
      */
     public function hasMatchingEvent()
     {
-        if ($this->event->has('postback')) {
-            return new Postbacks($this->event->get('postback'));
-        } else {
-            $event = new GenericEvent($this->event->get('message'));
-            $event->setName('message');
+        switch ($this->event->get('type')) {
+            case 'follow':
+                return new Follow($this->event->get('source'));
+                break;
 
-            return $event;
+            case 'unfollow':
+                return new Unfollow($this->event->get('source'));
+                break;
+
+            case 'join':
+                return new Join($this->event->get('source'));
+                break;
+
+            case 'leave':
+                return new Leave($this->event->get('source'));
+                break;
+
+            case 'postback':
+                return new Postback($this->event->get('postback'));
+                break;
+
+            default:
+                return false;
+                break;
         }
 
         return false;
