@@ -2,7 +2,7 @@
 
 namespace BotMan\Drivers\Line\Events;
 
-class Postbacks extends AbstractEvent
+class Postback extends AbstractEvent
 {
     /**
      * Return the event name to match.
@@ -11,6 +11,6 @@ class Postbacks extends AbstractEvent
      */
     public function getName()
     {
-        return 'postbacks';
+        return 'postback';
     }
 }
