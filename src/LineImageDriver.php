@@ -2,12 +2,12 @@
 
 namespace BotMan\Drivers\Line;
 
-use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class LineMessageVideoDriver extends LineDriver
+class LineImageDriver extends LineDriver
 {
-    const DRIVER_NAME = 'LineMessageVideo';
+    const DRIVER_NAME = 'LineImage';
 
     /**
      * Determine if the request is for this driver.
@@ -17,7 +17,7 @@ class LineMessageVideoDriver extends LineDriver
     public function matchesRequest()
     {
         return ($this->event->get('type') === 'message')
-            && ($this->event->get('message')['type'] === 'video')
+            && ($this->event->get('message')['type'] === 'image')
             && $this->validateSignature();
     }
 
@@ -30,7 +30,7 @@ class LineMessageVideoDriver extends LineDriver
     {
         if (empty($this->messages)) {
             $this->messages = [new IncomingMessage(
-                Video::PATTERN,
+                Image::PATTERN,
                 $this->getMessageSender($this->event->get('source')),
                 '',
                 $this->payload
@@ -43,7 +43,7 @@ class LineMessageVideoDriver extends LineDriver
     /**
      * @return string
      */
-    public function getVideoContent()
+    public function getImageContent()
     {
         $endpoint = str_replace(
             '{messageId}',

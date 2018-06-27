@@ -5,9 +5,9 @@ namespace BotMan\Drivers\Line;
 use BotMan\BotMan\Messages\Attachments\Audio;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class LineMessageAudioDriver extends LineDriver
+class LineAudioDriver extends LineDriver
 {
-    const DRIVER_NAME = 'LineMessageAudio';
+    const DRIVER_NAME = 'LineAudio';
 
     /**
      * Determine if the request is for this driver.

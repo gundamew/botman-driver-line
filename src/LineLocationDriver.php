@@ -5,9 +5,9 @@ namespace BotMan\Drivers\Line;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 
-class LineMessageLocationDriver extends LineDriver
+class LineLocationDriver extends LineDriver
 {
-    const DRIVER_NAME = 'LineMessageLocation';
+    const DRIVER_NAME = 'LineLocation';
 
     /**
      * Determine if the request is for this driver.
