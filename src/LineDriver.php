@@ -81,7 +81,7 @@ class LineDriver extends HttpDriver
     public function matchesRequest()
     {
         return ($this->validateSignature()
-            && $this->event->whereInStrict('type', ['message', 'postback'])->isNotEmpty());
+            && in_array($this->event->get('type'), ['message', 'postback'], true));
     }
 
     /**
@@ -134,7 +134,24 @@ class LineDriver extends HttpDriver
      */
     public function getMessages()
     {
-        return [];
+        if (empty($this->messages)) {
+            $message = new IncomingMessage(
+                '',
+                $this->getMessageSender($this->event->get('source')),
+                '',
+                $this->payload
+            );
+
+            if (isset($this->event->get('message')['text'])) {
+                $message->setText($this->event->get('message')['text']);
+            } elseif (isset($this->event->get('postback')['data'])) {
+                $message->setText($this->event->get('postback')['data']);
+            }
+
+            $this->messages = [$message];
+        }
+
+        return $this->messages;
     }
 
     /**
