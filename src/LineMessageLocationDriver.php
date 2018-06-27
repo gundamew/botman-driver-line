@@ -31,8 +31,8 @@ class LineMessageLocationDriver extends LineDriver
         if (empty($this->messages)) {
             $message = new IncomingMessage(
                 Location::PATTERN,
-                $this->event->get('source')['userId'],
-                $this->event->get('source')['userId'],
+                $this->getMessageSender($this->event->get('source')),
+                '',
                 $this->payload
             );
 
