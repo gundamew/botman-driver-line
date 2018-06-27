@@ -160,17 +160,11 @@ class LineDriver extends HttpDriver
      */
     protected function getMessageSender(array $source)
     {
-        if (isset($source['userId'])) {
-            return $source['userId'];
-        }
-
-        if ($source['type'] === 'group') {
-            return $source['groupId'];
-        } elseif ($source['type'] === 'room') {
-            return $source['roomId'];
-        } else {
+        if (!in_array($source['type'], ['user', 'group', 'room'], true)) {
             return '';
         }
+
+        return $source[$source['type'] . 'Id'];
     }
 
     /**
