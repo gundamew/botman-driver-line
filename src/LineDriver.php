@@ -138,6 +138,25 @@ class LineDriver extends HttpDriver
     }
 
     /**
+     * @param array $source
+     * @return string
+     */
+    protected function getMessageSender(array $source)
+    {
+        if (isset($source['userId'])) {
+            return $source['userId'];
+        }
+
+        if ($source['type'] === 'group') {
+            return $source['groupId'];
+        } elseif ($source['type'] === 'room') {
+            return $source['roomId'];
+        } else {
+            return '';
+        }
+    }
+
+    /**
      * @param Question|OutgoingMessage $message
      * @param IncomingMessage $matchingMessage
      * @param array $additionalParameters

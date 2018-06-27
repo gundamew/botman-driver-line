@@ -31,8 +31,8 @@ class LineMessageTextDriver extends LineDriver
         if (empty($this->messages)) {
             $this->messages = [new IncomingMessage(
                 $this->event->get('message')['text'],
-                $this->event->get('source')['userId'],
-                $this->event->get('source')['userId'],
+                $this->getMessageSender($this->event->get('source')),
+                '',
                 $this->payload
             )];
         }
