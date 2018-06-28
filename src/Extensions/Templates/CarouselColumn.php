@@ -1,20 +1,40 @@
 <?php
 
-namespace BotMan\Drivers\Line\Extensions;
+namespace BotMan\Drivers\Line\Extensions\Templates;
 
-class CarouselColumn extends AbstractTemplate
+use BotMan\Drivers\Line\Extensions\Templates\Actions\AbstractAction;
+
+class CarouselColumn extends AbstractColumn
 {
+    /** @var array */
+    protected $actions = [];
+
+    /** @var string */
+    protected $text = '';
+
     /** @var string */
     protected $title = '';
 
-    /** @var array */
-    protected $defaultAction = [];
-
-    /** @var string */
-    protected $imageUrl = '';
-
     /** @var string */
     protected $imageBackgroundColor = '#ffffff';
+
+    /**
+     * @param string $text
+     *
+     * @return static
+     */
+    public static function create($text)
+    {
+        return new static($text);
+    }
+
+    /**
+     * @param string $text
+     */
+    public function __construct($text)
+    {
+        $this->text = $text;
+    }
 
     /**
      * Set the title of column.
@@ -30,32 +50,6 @@ class CarouselColumn extends AbstractTemplate
     }
 
     /**
-     * Set action when column image is tapped.
-     *
-     * @param AbstractButton $default
-     * @return $this
-     */
-    public function defaultAction(AbstractButton $defaultAction)
-    {
-        $this->defaultAction = $defaultAction->toArray();
-
-        return $this;
-    }
-
-    /**
-     * Set column image URL.
-     *
-     * @param string $url
-     * @return $this
-     */
-    public function imageUrl($url)
-    {
-        $this->imageUrl = $url;
-
-        return $this;
-    }
-
-    /**
      * Specify RGB value of background color of column image.
      *
      * @param string $color
@@ -64,6 +58,30 @@ class CarouselColumn extends AbstractTemplate
     public function imageBackgroundColor($color)
     {
         $this->imageBackgroundColor = $color;
+
+        return $this;
+    }
+
+    /**
+     * @param AbstractAction $action
+     * @return $this
+     */
+    public function addButton(AbstractAction $action)
+    {
+        $this->actions[] = $action->toArray();
+
+        return $this;
+    }
+
+    /**
+     * @param array $actions
+     * @return $this
+     */
+    public function addButtons(array $actions)
+    {
+        foreach ($actions as $action) {
+            $this->actions[] = $action->toArray();
+        }
 
         return $this;
     }

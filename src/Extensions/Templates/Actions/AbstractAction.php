@@ -1,8 +1,8 @@
 <?php
 
-namespace BotMan\Drivers\Line\Extensions;
+namespace BotMan\Drivers\Line\Extensions\Templates\Actions;
 
-abstract class AbstractButton implements \JsonSerializable
+abstract class AbstractAction implements \JsonSerializable
 {
     /** @var string */
     protected $label = '';
@@ -29,7 +29,7 @@ abstract class AbstractButton implements \JsonSerializable
     }
 
     /**
-     * Set the button value.
+     * Set button value.
      *
      * @param string $value
      * @return $this

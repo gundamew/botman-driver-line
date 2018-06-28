@@ -1,8 +1,8 @@
 <?php
 
-namespace BotMan\Drivers\Line\Extensions;
+namespace BotMan\Drivers\Line\Extensions\Templates;
 
-class ImageCarouselTemplate extends AbstractTemplate
+class ImageCarousel extends AbstractTemplate
 {
     /** @var array */
     protected $columns = [];

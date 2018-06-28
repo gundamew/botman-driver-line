@@ -1,8 +1,8 @@
 <?php
 
-namespace BotMan\Drivers\Line\Extensions;
+namespace BotMan\Drivers\Line\Extensions\Templates;
 
-class ConfirmTemplate extends AbstractTemplate
+class Confirm extends AbstractTemplate
 {
     /**
      * @return array

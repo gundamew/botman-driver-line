@@ -1,6 +1,6 @@
 <?php
 
-namespace BotMan\Drivers\Line\Extensions;
+namespace BotMan\Drivers\Line\Extensions\Templates\Actions;
 
 class DatetimePickerButton extends AbstractButton
 {

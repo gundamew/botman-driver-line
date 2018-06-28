@@ -1,6 +1,8 @@
 <?php
 
-namespace BotMan\Drivers\Line\Extensions;
+namespace BotMan\Drivers\Line\Extensions\Templates;
+
+use BotMan\Drivers\Line\Extensions\Templates\Actions\AbstractAction;
 
 abstract class AbstractTemplate implements \JsonSerializable
 {
@@ -29,24 +31,24 @@ abstract class AbstractTemplate implements \JsonSerializable
     }
 
     /**
-     * @param AbstractButton $button
+     * @param AbstractAction $action
      * @return $this
      */
-    public function addButton(AbstractButton $button)
+    public function addButton(AbstractAction $action)
     {
-        $this->actions[] = $button->toArray();
+        $this->actions[] = $action->toArray();
 
         return $this;
     }
 
     /**
-     * @param array $buttons
+     * @param array $actions
      * @return $this
      */
-    public function addButtons(array $buttons)
+    public function addButtons(array $actions)
     {
-        foreach ($buttons as $button) {
-            $this->actions[] = $button->toArray();
+        foreach ($actions as $action) {
+            $this->actions[] = $action->toArray();
         }
 
         return $this;

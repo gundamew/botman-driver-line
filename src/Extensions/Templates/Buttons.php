@@ -1,8 +1,8 @@
 <?php
 
-namespace BotMan\Drivers\Line\Extensions;
+namespace BotMan\Drivers\Line\Extensions\Templates;
 
-class ButtonsTemplate extends AbstractTemplate
+class Buttons extends AbstractTemplate
 {
     /** @var string */
     protected $title = '';
