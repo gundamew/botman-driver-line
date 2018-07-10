@@ -48,7 +48,10 @@ class LineDriverTest extends TestCase
         return new LineDriver($request, $config, $htmlInterface);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @covers BotMan\Drivers\Line\LineDriver::getName
+     */
     public function it_returns_the_driver_name()
     {
         $driver = $this->getDriver(['events' => [[]]]);
@@ -57,6 +60,7 @@ class LineDriverTest extends TestCase
 
     /**
      * @test
+     * @covers BotMan\Drivers\Line\LineDriver::matchesRequest
      * @dataProvider validRequestDataProvider
      */
     public function it_matches_the_request($request, $signature)
@@ -115,6 +119,7 @@ class LineDriverTest extends TestCase
 
     /**
      * @test
+     * @covers BotMan\Drivers\Line\LineDriver::matchesRequest
      * @dataProvider invalidRequestDataProvider
      */
     public function it_matches_the_request_not($request, $signature)
