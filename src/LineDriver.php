@@ -81,7 +81,17 @@ class LineDriver extends HttpDriver
     public function matchesRequest()
     {
         return ($this->validateSignature()
-            && in_array($this->event->get('type'), ['message', 'postback'], true));
+            && in_array($this->event->get('type'), [
+                'follow',
+                'unfollow',
+                'join',
+                'leave',
+                'message',
+                'postback',
+            ], true)
+            && $this->event->has('replyToken')
+            && $this->event->has('timestamp')
+            && $this->event->has('source'));
     }
 
     /**
