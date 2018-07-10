@@ -38,10 +38,10 @@ class Buttons extends AbstractTemplate
     /**
      * Set action when image is tapped.
      *
-     * @param AbstractButton $default
+     * @param AbstractAction $default
      * @return $this
      */
-    public function defaultAction(AbstractButton $defaultAction)
+    public function defaultAction(AbstractAction $defaultAction)
     {
         $this->defaultAction = $defaultAction->toArray();
 

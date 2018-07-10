@@ -2,7 +2,7 @@
 
 namespace BotMan\Drivers\Line\Extensions\Templates\Actions;
 
-class PostbackButton extends AbstractButton
+class PostbackButton extends AbstractAction
 {
     /**
      * @return array

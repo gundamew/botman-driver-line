@@ -2,7 +2,7 @@
 
 namespace BotMan\Drivers\Line\Extensions\Templates\Actions;
 
-class DatetimePickerButton extends AbstractButton
+class DatetimePickerButton extends AbstractAction
 {
     /** @var string */
     protected $mode = '';
