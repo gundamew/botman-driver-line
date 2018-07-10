@@ -2,10 +2,10 @@
 
 namespace BotMan\Drivers\Line\Providers;
 
-use BotMan\Drivers\Line\LineDriver;
-use Illuminate\Support\ServiceProvider;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\Drivers\Line\LineDriver;
 use BotMan\Studio\Providers\StudioServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
 class LineServiceProvider extends ServiceProvider
 {
