@@ -18,8 +18,6 @@ class LineDriverTest extends TestCase
         ],
     ];
 
-    protected $faker = null;
-
     public function tearDown()
     {
     }
