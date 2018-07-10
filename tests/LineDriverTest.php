@@ -51,7 +51,7 @@ class LineDriverTest extends TestCase
     /** @test */
     public function it_returns_the_driver_name()
     {
-        $driver = $this->getDriver([]);
+        $driver = $this->getDriver(['events' => [[]]]);
         $this->assertSame('Line', $driver->getName());
     }
 
