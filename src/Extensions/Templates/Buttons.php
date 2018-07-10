@@ -63,7 +63,7 @@ class Buttons extends AbstractTemplate
 
     /**
      * Select title image aspect ratio.
-     * Available value: rectangle, square
+     * Available value: rectangle, square.
      *
      * @param string $aspectRatio
      * @return $this
@@ -77,7 +77,7 @@ class Buttons extends AbstractTemplate
 
     /**
      * Select title image size.
-     * Available value: cover, contain
+     * Available value: cover, contain.
      *
      * @param string $size
      * @return $this
@@ -117,15 +117,15 @@ class Buttons extends AbstractTemplate
             ],
         ];
 
-        if (!empty($this->title)) {
+        if (! empty($this->title)) {
             $message['template']['title'] = $this->title;
         }
 
-        if (!empty($this->defaultAction)) {
+        if (! empty($this->defaultAction)) {
             $message['template']['defaultAction'] = $this->defaultAction;
         }
 
-        if (!empty($this->imageUrl)) {
+        if (! empty($this->imageUrl)) {
             $message['template']['thumbnailImageUrl'] = $this->imageUrl;
             $message['template']['imageAspectRatio'] = $this->imageAspectRatio;
             $message['template']['imageSize'] = $this->imageSize;

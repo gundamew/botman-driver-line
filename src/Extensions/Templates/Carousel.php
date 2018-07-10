@@ -39,7 +39,7 @@ class Carousel extends AbstractTemplate
 
     /**
      * Select column image aspect ratio.
-     * Available value: rectangle, square
+     * Available value: rectangle, square.
      *
      * @param string $aspectRatio
      * @return $this
@@ -53,7 +53,7 @@ class Carousel extends AbstractTemplate
 
     /**
      * Select column image size.
-     * Available value: cover, contain
+     * Available value: cover, contain.
      *
      * @param string $size
      * @return $this

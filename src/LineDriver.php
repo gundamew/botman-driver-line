@@ -2,27 +2,23 @@
 
 namespace BotMan\Drivers\Line;
 
-use Illuminate\Support\Collection;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
-
-use BotMan\BotMan\Drivers\HttpDriver;
-use BotMan\BotMan\Drivers\Events\GenericEvent;
-use BotMan\BotMan\Messages\Attachments\Audio;
-use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Attachments\Location;
-use BotMan\BotMan\Messages\Attachments\Video;
-use BotMan\BotMan\Messages\Incoming\Answer;
-use BotMan\BotMan\Messages\Incoming\IncomingMessage;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
-use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Users\User;
-
-use BotMan\Drivers\Line\Events\Follow;
+use Illuminate\Support\Collection;
 use BotMan\Drivers\Line\Events\Join;
+use BotMan\BotMan\Drivers\HttpDriver;
 use BotMan\Drivers\Line\Events\Leave;
+use BotMan\Drivers\Line\Events\Follow;
 use BotMan\Drivers\Line\Events\Postback;
 use BotMan\Drivers\Line\Events\Unfollow;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use Symfony\Component\HttpFoundation\Request;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class LineDriver extends HttpDriver
 {
@@ -59,7 +55,7 @@ class LineDriver extends HttpDriver
         ];
 
         return $this->http->post($this->getApiUrl($endpoint), [], $parameters, [
-            'Authorization: Bearer ' . $this->config->get('channel_access_token'),
+            'Authorization: Bearer '.$this->config->get('channel_access_token'),
             'Content-Type: application/json',
         ], true);
     }
@@ -80,7 +76,7 @@ class LineDriver extends HttpDriver
      */
     public function matchesRequest()
     {
-        return ($this->validateSignature()
+        return $this->validateSignature()
             && in_array($this->event->get('type'), [
                 'follow',
                 'unfollow',
@@ -91,7 +87,7 @@ class LineDriver extends HttpDriver
             ], true)
             && $this->event->has('replyToken')
             && $this->event->has('timestamp')
-            && $this->event->has('source'));
+            && $this->event->has('source');
     }
 
     /**
@@ -170,11 +166,11 @@ class LineDriver extends HttpDriver
      */
     protected function getMessageSender(array $source)
     {
-        if (!in_array($source['type'], ['user', 'group', 'room'], true)) {
+        if (! in_array($source['type'], ['user', 'group', 'room'], true)) {
             return '';
         }
 
-        return $source[$source['type'] . 'Id'];
+        return $source[$source['type'].'Id'];
     }
 
     /**
@@ -241,7 +237,7 @@ class LineDriver extends HttpDriver
     public function sendPayload($payload)
     {
         return $this->http->post($this->getApiUrl('/message/reply'), [], $payload, [
-            'Authorization: Bearer ' . $this->config->get('channel_access_token'),
+            'Authorization: Bearer '.$this->config->get('channel_access_token'),
             'Content-Type: application/json',
         ], true);
     }
@@ -251,7 +247,7 @@ class LineDriver extends HttpDriver
      */
     public function isConfigured()
     {
-        return (!empty($this->config->get('channel_access_token')));
+        return ! empty($this->config->get('channel_access_token'));
     }
 
     /**
@@ -275,6 +271,6 @@ class LineDriver extends HttpDriver
      */
     protected function getApiUrl($endpoint)
     {
-        return static::API_URL_BASE . $endpoint;
+        return static::API_URL_BASE.$endpoint;
     }
 }

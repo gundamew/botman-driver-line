@@ -2,10 +2,10 @@
 
 namespace BotMan\Drivers\Line\Providers;
 
-use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\Drivers\Line\LineDriver;
-use BotMan\Studio\Providers\StudioServiceProvider;
 use Illuminate\Support\ServiceProvider;
+use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\Studio\Providers\StudioServiceProvider;
 
 class LineServiceProvider extends ServiceProvider
 {
@@ -20,10 +20,10 @@ class LineServiceProvider extends ServiceProvider
             $this->loadDrivers();
 
             $this->publishes([
-                __DIR__ . '/../../stubs/line.php' => config_path('botman/line.php'),
+                __DIR__.'/../../stubs/line.php' => config_path('botman/line.php'),
             ]);
 
-            $this->mergeConfigFrom(__DIR__ . '/../../stubs/line.php', 'botman.line');
+            $this->mergeConfigFrom(__DIR__.'/../../stubs/line.php', 'botman.line');
         }
     }
 

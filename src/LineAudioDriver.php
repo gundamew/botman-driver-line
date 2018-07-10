@@ -52,7 +52,7 @@ class LineAudioDriver extends LineDriver
         );
 
         return $this->http->get($this->getApiUrl($endpoint), [], [
-            'Authorization: Bearer ' . $this->config->get('channel_access_token'),
+            'Authorization: Bearer '.$this->config->get('channel_access_token'),
         ])->getContent();
     }
 }

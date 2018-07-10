@@ -96,15 +96,15 @@ class CarouselColumn extends AbstractColumn
             'actions' => $this->actions,
         ];
 
-        if (!empty($this->title)) {
+        if (! empty($this->title)) {
             $message['title'] = $this->title;
         }
 
-        if (!empty($this->defaultAction)) {
+        if (! empty($this->defaultAction)) {
             $message['defaultAction'] = $this->defaultAction;
         }
 
-        if (!empty($this->imageUrl)) {
+        if (! empty($this->imageUrl)) {
             $message['thumbnailImageUrl'] = $this->imageUrl;
             $message['imageBackgroundColor'] = $this->imageBackgroundColor;
         }

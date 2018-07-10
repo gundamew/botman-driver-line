@@ -4,8 +4,8 @@ namespace Tests;
 
 use Mockery;
 use BotMan\BotMan\Http\Curl;
-use BotMan\Drivers\Line\LineDriver;
 use PHPUnit\Framework\TestCase;
+use BotMan\Drivers\Line\LineDriver;
 use Symfony\Component\HttpFoundation\Request;
 
 class LineDriverTest extends TestCase
@@ -30,7 +30,7 @@ class LineDriverTest extends TestCase
 
     private function getRequest(array $responseData)
     {
-        $request = Mockery::mock(Request::class . '[getContent]');
+        $request = Mockery::mock(Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         return $request;
