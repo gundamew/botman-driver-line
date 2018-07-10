@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Mockery;
 use BotMan\BotMan\Http\Curl;
 use PHPUnit\Framework\TestCase;
 use BotMan\Drivers\Line\LineDriver;
@@ -10,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LineDriverTest extends TestCase
 {
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+
     protected $config = [
         'line' => [
             'channel_access_token' => 'CHANNEL-ACCESS-TOKEN',
@@ -21,7 +22,6 @@ class LineDriverTest extends TestCase
 
     public function tearDown()
     {
-        Mockery::close();
     }
 
     public function setUp()
@@ -30,7 +30,7 @@ class LineDriverTest extends TestCase
 
     private function getRequest(array $responseData)
     {
-        $request = Mockery::mock(Request::class.'[getContent]');
+        $request = \Mockery::mock(Request::class.'[getContent]');
         $request->shouldReceive('getContent')->andReturn(json_encode($responseData));
 
         return $request;
@@ -42,7 +42,7 @@ class LineDriverTest extends TestCase
         $request->headers->set('X_LINE_SIGNATURE', $signature);
 
         if ($htmlInterface === null) {
-            $htmlInterface = Mockery::mock(Curl::class);
+            $htmlInterface = \Mockery::mock(Curl::class);
         }
 
         return new LineDriver($request, $config, $htmlInterface);
