@@ -168,4 +168,24 @@ class LineDriverTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @test
+     * @covers BotMan\Drivers\Line\LineDriver::isConfigured
+     */
+    public function it_is_configured()
+    {
+        $driver = $this->getDriver([]);
+        $this->assertFalse($driver->isConfigured());
+    }
+
+    /**
+     * @test
+     * @covers BotMan\Drivers\Line\LineDriver::isConfigured
+     */
+    public function it_is_configured_not()
+    {
+        $driver = $this->getDriver([], $this->config);
+        $this->assertTrue($driver->isConfigured());
+    }
 }
