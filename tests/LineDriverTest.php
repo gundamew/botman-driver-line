@@ -34,7 +34,7 @@ class LineDriverTest extends TestCase
         return $request;
     }
 
-    private function getDriver($responseData, $config = [], $signature = '', $htmlInterface = null)
+    private function getDriver(array $responseData, $config = [], $signature = '', $htmlInterface = null)
     {
         $request = $this->getRequest($responseData);
         $request->headers->set('X_LINE_SIGNATURE', $signature);
@@ -52,7 +52,7 @@ class LineDriverTest extends TestCase
      */
     public function it_returns_the_driver_name()
     {
-        $driver = $this->getDriver(['events' => [[]]]);
+        $driver = $this->getDriver([]);
         $this->assertSame('Line', $driver->getName());
     }
 
