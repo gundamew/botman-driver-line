@@ -17,6 +17,7 @@ use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Symfony\Component\HttpFoundation\Request;
 use BotMan\BotMan\Messages\Attachments\Location;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
@@ -33,8 +34,8 @@ class LineDriver extends HttpDriver
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = $request->request->all();
-        $this->event = Collection::make(json_decode($this->content, true)['events'][0]);
+        $this->payload = new ParameterBag(json_decode($this->content, true));
+        $this->event = Collection::make($this->payload->get('events')[0]);
         $this->signature = $request->headers->get('X_LINE_SIGNATURE', '');
         $this->config = Collection::make($this->config->get('line'));
     }
