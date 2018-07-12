@@ -6,6 +6,8 @@ use BotMan\BotMan\Http\Curl;
 use PHPUnit\Framework\TestCase;
 use BotMan\Drivers\Line\LineDriver;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class LineDriverTest extends TestCase
 {
@@ -187,5 +189,35 @@ class LineDriverTest extends TestCase
     {
         $driver = $this->getDriver([], $this->config);
         $this->assertTrue($driver->isConfigured());
+    }
+
+    /**
+     * @test
+     * @covers BotMan\Drivers\Line\LineDriver::sendPayload
+     * @dataProvider validRequestDataProvider
+     */
+    public function it_can_reply_string_messages($request, $signature)
+    {
+        $htmlInterface = \Mockery::mock(Curl::class);
+        $htmlInterface->shouldReceive('post')
+            ->with('https://api.line.me/v2/bot/message/reply', [], [
+                'replyToken' => $request['events'][0]['replyToken'],
+                'messages' => [
+                    [
+                        'type' => 'text',
+                        'text' => 'Test',
+                    ],
+                ],
+            ], [
+                'Authorization: Bearer '.$this->config['line']['channel_access_token'],
+                'Content-Type: application/json',
+            ], true)
+            ->once()
+            ->andReturn(new Response());
+
+        $driver = $this->getDriver($request, $this->config, $signature, $htmlInterface);
+        $driver->sendPayload($driver->buildServicePayload(
+            new OutgoingMessage('Test'), $driver->getMessages()[0]
+        ));
     }
 }
