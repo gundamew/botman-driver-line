@@ -248,7 +248,8 @@ class LineDriver extends HttpDriver
      */
     public function isConfigured()
     {
-        return ! empty($this->config->get('channel_access_token'));
+        return ! empty($this->config->get('channel_access_token'))
+            && ! empty($this->config->get('channel_secret'));
     }
 
     /**
