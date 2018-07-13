@@ -22,9 +22,17 @@ class LineServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../../stubs/line.php' => config_path('botman/line.php'),
             ]);
-
-            $this->mergeConfigFrom(__DIR__.'/../../stubs/line.php', 'botman.line');
         }
+    }
+
+    /**
+     * Register bindings in the container.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__.'/../../stubs/line.php', 'botman.line');
     }
 
     /**
