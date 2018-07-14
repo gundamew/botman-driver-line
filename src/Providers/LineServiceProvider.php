@@ -5,6 +5,10 @@ namespace BotMan\Drivers\Line\Providers;
 use BotMan\Drivers\Line\LineDriver;
 use Illuminate\Support\ServiceProvider;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\Drivers\Line\LineAudioDriver;
+use BotMan\Drivers\Line\LineImageDriver;
+use BotMan\Drivers\Line\LineVideoDriver;
+use BotMan\Drivers\Line\LineLocationDriver;
 use BotMan\Studio\Providers\StudioServiceProvider;
 
 class LineServiceProvider extends ServiceProvider
@@ -41,6 +45,10 @@ class LineServiceProvider extends ServiceProvider
     protected function loadDrivers()
     {
         DriverManager::loadDriver(LineDriver::class);
+        DriverManager::loadDriver(LineAudioDriver::class);
+        DriverManager::loadDriver(LineImageDriver::class);
+        DriverManager::loadDriver(LineLocationDriver::class);
+        DriverManager::loadDriver(LineVideoDriver::class);
     }
 
     /**

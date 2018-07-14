@@ -3,6 +3,10 @@
         "stubs/line.php"
     ],
     "botman/driver": [
-        "BotMan\\Drivers\\Line\\LineDriver"
+        "BotMan\\Drivers\\Line\\LineDriver",
+        "BotMan\\Drivers\\Line\\LineAudioDriver",
+        "BotMan\\Drivers\\Line\\LineImageDriver",
+        "BotMan\\Drivers\\Line\\LineLocationDriver",
+        "BotMan\\Drivers\\Line\\LineVideoDriver"
     ]
 }
