@@ -34,7 +34,7 @@ class LineDriver extends HttpDriver
      */
     public function buildPayload(Request $request)
     {
-        $this->payload = new ParameterBag(json_decode($this->content, true));
+        $this->payload = new ParameterBag((array) json_decode($this->content, true));
         $this->event = Collection::make($this->payload->get('events')[0]);
         $this->signature = $request->headers->get('X_LINE_SIGNATURE', '');
         $this->config = Collection::make($this->config->get('line'));
