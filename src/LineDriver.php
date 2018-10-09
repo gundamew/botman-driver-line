@@ -67,7 +67,22 @@ class LineDriver extends HttpDriver
      */
     public function getUser(IncomingMessage $matchingMessage)
     {
-        return new User();
+        $events = $this->event;
+        
+        $userId = $this->event->get('source')['userId'];
+        $eventType = $this->event->get('source')['type'];
+        
+        $userInfoData = $this->http->get($this->getApiUrl("/profile/{$userId}"), [], [
+            'Authorization: Bearer '.$this->config->get('channel_access_token'),
+            'Content-Type: application/json',
+        ], true);
+        
+        $userInfo = json_decode($userInfoData->getContent(), true);
+        
+        $names = self::split_name($userInfo['displayName']);
+        
+        
+        return new User($userInfo['userId'],$names['first_name'],$names['last_name'], null, $userInfo);
     }
 
     /**
@@ -132,6 +147,36 @@ class LineDriver extends HttpDriver
         }
 
         return false;
+    }
+    
+    /**
+     * Split name function.
+     * 
+     * @param string $name
+     *
+     * @return array
+     */
+    public function split_name($name) {
+        $parts = array();
+    
+        while ( strlen( trim($name)) > 0 ) {
+            $name = trim($name);
+            $string = preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+            $parts[] = $string;
+            $name = trim( preg_replace('#'.$string.'#', '', $name ) );
+        }
+    
+        if (empty($parts)) {
+            return false;
+        }
+    
+        $parts = array_reverse($parts);
+        $name = array();
+        $name['first_name'] = $parts[0];
+        $name['middle_name'] = (isset($parts[2])) ? $parts[1] : '';
+        $name['last_name'] = (isset($parts[2])) ? $parts[2] : ( isset($parts[1]) ? $parts[1] : '');
+    
+        return $name;
     }
 
     /**
