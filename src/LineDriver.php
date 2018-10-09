@@ -67,10 +67,7 @@ class LineDriver extends HttpDriver
      */
     public function getUser(IncomingMessage $matchingMessage)
     {
-        $events = $this->event;
-        
         $userId = $this->event->get('source')['userId'];
-        $eventType = $this->event->get('source')['type'];
         
         $userInfoData = $this->http->get($this->getApiUrl("/profile/{$userId}"), [], [
             'Authorization: Bearer '.$this->config->get('channel_access_token'),
@@ -78,11 +75,9 @@ class LineDriver extends HttpDriver
         ], true);
         
         $userInfo = json_decode($userInfoData->getContent(), true);
-        
         $names = self::split_name($userInfo['displayName']);
         
-        
-        return new User($userInfo['userId'],$names['first_name'],$names['last_name'], null, $userInfo);
+        return new User($userInfo['userId'], $names['first_name'], $names['last_name'], null, $userInfo);
     }
 
     /**
@@ -156,14 +151,15 @@ class LineDriver extends HttpDriver
      *
      * @return array
      */
-    public function split_name($name) {
-        $parts = array();
+    public function split_name($name)
+    {
+        $parts = [];
     
-        while ( strlen( trim($name)) > 0 ) {
+        while (strlen(trim($name)) > 0) {
             $name = trim($name);
             $string = preg_replace('#.*\s([\w-]*)$#', '$1', $name);
             $parts[] = $string;
-            $name = trim( preg_replace('#'.$string.'#', '', $name ) );
+            $name = trim(preg_replace('#'.$string.'#', '', $name));
         }
     
         if (empty($parts)) {
@@ -171,10 +167,10 @@ class LineDriver extends HttpDriver
         }
     
         $parts = array_reverse($parts);
-        $name = array();
+        $name = [];
         $name['first_name'] = $parts[0];
         $name['middle_name'] = (isset($parts[2])) ? $parts[1] : '';
-        $name['last_name'] = (isset($parts[2])) ? $parts[2] : ( isset($parts[1]) ? $parts[1] : '');
+        $name['last_name'] = (isset($parts[2])) ? $parts[2] : (isset($parts[1]) ? $parts[1] : '');
     
         return $name;
     }
