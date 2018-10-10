@@ -69,6 +69,20 @@ class LineDriverTest extends TestCase
         $this->assertTrue($driver->matchesRequest());
     }
 
+    /**
+     * @test
+     * Tests the function split name
+     */
+    public function it_return_split_name()
+    {
+        $driver = $this->getDriver([]);
+        $names = $driver->split_name('Foo Bar Baz');
+
+        $this->assertEquals('Foo', $names['first_name']);
+        $this->assertEquals('Bar', $names['middle_name']);
+        $this->assertEquals('Baz', $names['last_name']);
+    }
+
     public function validRequestDataProvider()
     {
         return [
