@@ -74,10 +74,14 @@ class LineDriver extends HttpDriver
             'Content-Type: application/json',
         ], true);
         
-        $userInfo = json_decode($userInfoData->getContent(), true);
-        $names = self::split_name($userInfo['displayName']);
-        
-        return new User($userInfo['userId'], $names['first_name'], $names['last_name'], null, $userInfo);
+        try {
+            $userInfo = json_decode($userInfoData->getContent(), true);
+            $names = self::split_name($userInfo['displayName']);
+            
+            return new User($userId, $names['first_name'], $names['last_name'], null, $userInfo);
+        } catch (\Exception $e) {
+            return new User($userId);
+        }
     }
 
     /**
