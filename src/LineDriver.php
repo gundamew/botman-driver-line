@@ -67,7 +67,16 @@ class LineDriver extends HttpDriver
      */
     public function getUser(IncomingMessage $matchingMessage)
     {
-        return new User();
+        $userId = $this->event->get('source')['userId'];
+        
+        $userInfoData = $this->http->get($this->getApiUrl("/profile/{$userId}"), [], [
+            'Authorization: Bearer '.$this->config->get('channel_access_token'),
+            'Content-Type: application/json',
+        ], true);
+        
+        $userInfo = json_decode($userInfoData->getContent(), true);
+            
+        return new User($userId, $userInfo['displayName'], null, null, $userInfo);
     }
 
     /**
